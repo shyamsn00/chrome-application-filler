@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sample Job Application - Senior Software Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --border: #1f2937;
+      --text: #f9fafb;
+      --text-muted: #9ca3af;
+      --primary: #4f46e5;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      max-width: 780px;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+    .header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+      margin-bottom: 28px;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(79, 70, 229, 0.15);
+      color: #818cf8;
+      border: 1px solid rgba(79, 70, 229, 0.3);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .meta {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 6px;
+    }
+    .section-heading {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 28px 0 16px;
+      color: #e5e7eb;
+      border-left: 3px solid #6366f1;
+      padding-left: 10px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .full-width {
+      grid-column: 1 / -1;
+    }
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #d1d5db;
+    }
+    .required {
+      color: #f43f5e;
+    }
+    input, select, textarea {
+      background: #1f2937;
+      border: 1px solid #374151;
+      color: #f9fafb;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+    }
+    .actions {
+      margin-top: 36px;
+      display: flex;
+      gap: 14px;
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+    }
+    .btn-submit {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .btn-reset {
+      background: #374151;
+      color: #e5e7eb;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .info-banner {
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px dashed rgba(99, 102, 241, 0.4);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #c7d2fe;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="info-banner">
+      💡 <strong>Testing Instructions:</strong> Click the <strong>AutoFill Pro</strong> extension icon in your Chrome toolbar or use the keyboard shortcut <kbd>Alt+Shift+F</kbd> (or click the floating pill in the bottom-right corner) to watch all these fields fill instantly!
+    </div>
+
+    <header class="header">
+      <div class="badge">TEST APPLICATION FORM</div>
+      <h1>Senior Full-Stack Engineer</h1>
+      <div class="meta">Acme Software Inc. • San Francisco, CA (Hybrid / Remote) • Full-Time</div>
+    </header>
+
+    <form id="application-form" onsubmit="event.preventDefault(); alert('Application Submitted (Test)!');">
+      <!-- Contact Information -->
+      <div class="section-heading">Contact Information</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="first_name">First Name <span class="required">*</span></label>
+          <input type="text" id="first_name" name="first_name" placeholder="First Name" required>
+        </div>
+        <div class="form-group">
+          <label for="last_name">Last Name <span class="required">*</span></label>
+          <input type="text" id="last_name" name="last_name" placeholder="Last Name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email <span class="required">*</span></label>
+          <input type="email" id="email" name="email" placeholder="you@domain.com" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone (Adaptive)</label>
+          <input type="tel" id="phone" name="phone" placeholder="(555) 000-0000">
+        </div>
+        <!-- Edge Case: Strict 10-Digit Phone with maxlength=10 -->
+        <div class="form-group">
+          <label for="strict_phone">Phone (Strict 10 Digits, maxlength=10) <span style="font-size: 11px; color: #818cf8;">[Tests stripping +1]</span></label>
+          <input type="text" id="strict_phone" name="strict_phone" maxlength="10" placeholder="10-digit phone number">
+        </div>
+        <!-- Edge Case: Separate Country Code + Phone Number -->
+        <div class="form-group">
+          <label for="phone_with_code">Country Code & Local Phone <span style="font-size: 11px; color: #818cf8;">[Tests country code separation]</span></label>
+          <div style="display: flex; gap: 8px;">
+            <select id="country_code" name="country_code" style="width: 110px;">
+              <option value="">Country</option>
+              <option value="+1">+1 (US)</option>
+              <option value="+44">+44 (UK)</option>
+              <option value="+91">+91 (IN)</option>
+            </select>
+            <input type="tel" id="local_phone" name="local_phone" placeholder="555-019-2810" style="flex: 1;">
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label for="street_address">Street Address</label>
+          <input type="text" id="street_address" name="street_address" placeholder="123 Main St">
+        </div>
+        <div class="form-group">
+          <label for="city">City</label>
+          <input type="text" id="city" name="city" placeholder="City">
+        </div>
+        <!-- Edge Case: State Select Dropdown (value="CA") -->
+        <div class="form-group">
+          <label for="state_select">State / Region (Dropdown) <span style="font-size: 11px; color: #818cf8;">[Tests 2-way resolution]</span></label>
+          <select id="state_select" name="state_select">
+            <option value="">Select State</option>
+            <option value="AL">Alabama</option>
+            <option value="AK">Alaska</option>
+            <option value="AZ">Arizona</option>
+            <option value="CA">California</option>
+            <option value="CO">Colorado</option>
+            <option value="NY">New York</option>
+            <option value="TX">Texas</option>
+            <option value="WA">Washington</option>
+          </select>
+        </div>
+        <!-- Edge Case: State 2-Letter Code Input (maxlength=2) -->
+        <div class="form-group">
+          <label for="state_code_input">State Code (maxlength=2) <span style="font-size: 11px; color: #818cf8;">[Tests code abbreviation]</span></label>
+          <input type="text" id="state_code_input" name="state_code_input" maxlength="2" placeholder="e.g. CA">
+        </div>
+        <div class="form-group">
+          <label for="postal_code">Zip / Postal Code</label>
+          <input type="text" id="postal_code" name="postal_code" placeholder="Postal Code">
+        </div>
+        <div class="form-group">
+          <label for="country">Country</label>
+          <input type="text" id="country" name="country" placeholder="Country">
+        </div>
+      </div>
+
+      <!-- Links -->
+      <div class="section-heading">Links & Profiles</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="linkedin_profile">LinkedIn URL</label>
+          <input type="url" id="linkedin_profile" name="linkedin_profile" placeholder="https://linkedin.com/in/...">
+        </div>
+        <div class="form-group">
+          <label for="github_profile">GitHub URL</label>
+          <input type="url" id="github_profile" name="github_profile" placeholder="https://github.com/...">
+        </div>
+        <div class="form-group full-width">
+          <label for="portfolio_url">Portfolio or Personal Website</label>
+          <input type="url" id="portfolio_url" name="portfolio_url" placeholder="https://...">
+        </div>
+      </div>
+
+      <!-- Education & Experience -->
+      <div class="section-heading">Education & Experience</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="school">University / College</label>
+          <input type="text" id="school" name="school" placeholder="University name">
+        </div>
+        <div class="form-group">
+          <label for="degree">Degree</label>
+          <input type="text" id="degree" name="degree" placeholder="Degree">
+        </div>
+        <div class="form-group">
+          <label for="major">Field of Study / Major</label>
+          <input type="text" id="major" name="major" placeholder="Major">
+        </div>
+        <div class="form-group">
+          <label for="graduation_year">Graduation Year</label>
+          <input type="text" id="graduation_year" name="graduation_year" placeholder="e.g. 2023">
+        </div>
+        <div class="form-group">
+          <label for="current_title">Current Job Title</label>
+          <input type="text" id="current_title" name="current_title" placeholder="Job Title">
+        </div>
+        <div class="form-group">
+          <label for="current_company">Current Employer</label>
+          <input type="text" id="current_company" name="current_company" placeholder="Company Name">
+        </div>
+        <div class="form-group">
+          <label for="years_experience">Years of Relevant Experience</label>
+          <input type="text" id="years_experience" name="years_experience" placeholder="e.g. 5">
+        </div>
+        <div class="form-group">
+          <label for="expected_salary">Desired Compensation / Salary ($)</label>
+          <input type="text" id="expected_salary" name="expected_salary" placeholder="e.g. 150000">
+        </div>
+      </div>
+
+      <!-- Work Authorization -->
+      <div class="section-heading">Work Authorization</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="authorized_us">Are you legally authorized to work in the United States?</label>
+          <select id="authorized_us" name="authorized_us">
+            <option value="">-- Select One --</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="require_sponsorship">Will you now or in the future require visa sponsorship?</label>
+          <select id="require_sponsorship" name="require_sponsorship">
+            <option value="">-- Select One --</option>
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Screening Questions -->
+      <div class="section-heading">Screening & Custom Questions</div>
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label for="tell_me_about_yourself">Tell me about yourself and why you are interested in this role:</label>
+          <textarea id="tell_me_about_yourself" name="tell_me_about_yourself" rows="3"></textarea>
+        </div>
+        <div class="form-group full-width">
+          <label for="desired_start_date">Desired Start Date:</label>
+          <input type="text" id="desired_start_date" name="desired_start_date" placeholder="Availability to start">
+        </div>
+      </div>
+
+      <!-- EEOC Voluntary Identification -->
+      <div class="section-heading">Voluntary Self-Identification</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="veteran_status">Veteran Status</label>
+          <select id="veteran_status" name="veteran_status">
+            <option value="">-- Select --</option>
+            <option value="I am not a protected veteran">I am not a protected veteran</option>
+            <option value="I identify as one or more of the classifications of protected veteran">I identify as a protected veteran</option>
+            <option value="I decline to self-identify">I decline to self-identify</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="disability_status">Disability Status</label>
+          <select id="disability_status" name="disability_status">
+            <option value="">-- Select --</option>
+            <option value="No, I do not have a disability">No, I do not have a disability</option>
+            <option value="Yes, I have a disability">Yes, I have a disability</option>
+            <option value="I do not wish to answer">I do not wish to answer</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn-submit">Submit Application</button>
+        <button type="reset" class="btn-reset">Clear Form</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

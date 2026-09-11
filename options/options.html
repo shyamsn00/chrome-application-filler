@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoFill Pro - Profile & Application Settings</title>
+  <link rel="stylesheet" href="options.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="#ffffff">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
+        </div>
+        <div class="brand-info">
+          <h2>AutoFill Pro</h2>
+          <span>Application Filler</span>
+        </div>
+      </div>
+
+      <!-- Profile Selector Block in Sidebar -->
+      <div class="sidebar-profile-box">
+        <div class="box-header">
+          <label for="active-profile-select">PROFILE</label>
+          <button id="add-profile-btn" class="text-btn" title="Create New Profile">+ New</button>
+        </div>
+        <div class="select-wrapper">
+          <select id="active-profile-select" class="sidebar-select"></select>
+        </div>
+        <div class="profile-actions">
+          <button id="rename-profile-btn" class="mini-btn">Rename</button>
+          <button id="delete-profile-btn" class="mini-btn danger">Delete</button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs">
+        <button class="nav-item active" data-tab="personal">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span>Personal Info</span>
+        </button>
+
+        <button class="nav-item" data-tab="links">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+          </svg>
+          <span>Links & Socials</span>
+        </button>
+
+        <button class="nav-item" data-tab="experience">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+          <span>Education & Work</span>
+        </button>
+
+        <button class="nav-item" data-tab="compliance">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span>Work Authorization</span>
+        </button>
+
+        <button class="nav-item" data-tab="custom">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span>Q&A & Custom Fields</span>
+        </button>
+
+        <button class="nav-item" data-tab="siterules">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          <span>Website Rules (Overrides)</span>
+        </button>
+
+        <button class="nav-item" data-tab="settings">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          <span>Settings & Backup</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span class="tip-text">Autofill shortcut: <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd></span>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Action Bar -->
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1 id="tab-heading">Personal Information</h1>
+          <p id="tab-subheading">Configure your essential contact details and residence.</p>
+        </div>
+        <div class="topbar-actions">
+          <span id="save-status" class="save-status">Saved</span>
+          <button id="save-profile-btn" class="primary-btn">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+              <polyline points="17 21 17 13 7 13 7 21"/>
+              <polyline points="7 3 7 8 15 8"/>
+            </svg>
+            <span>Save Profile</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Tab 1: Personal Info -->
+      <section id="tab-personal" class="tab-pane active">
+        <div class="form-card">
+          <h3 class="card-title">Full Name</h3>
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label for="personal-firstName">First Name</label>
+              <input type="text" id="personal-firstName" placeholder="e.g. Alex">
+            </div>
+            <div class="form-group">
+              <label for="personal-lastName">Last Name</label>
+              <input type="text" id="personal-lastName" placeholder="e.g. Morgan">
+            </div>
+            <div class="form-group">
+              <label for="personal-fullName">Full Name</label>
+              <input type="text" id="personal-fullName" placeholder="e.g. Alex Morgan">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h3 class="card-title">Contact Coordinates & Phone Format</h3>
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label for="personal-email">Email Address</label>
+              <input type="email" id="personal-email" placeholder="alex.morgan@example.com">
+            </div>
+            <div class="form-group">
+              <label for="personal-phone">Phone Number (Any format)</label>
+              <input type="tel" id="personal-phone" placeholder="(555) 349-2810">
+            </div>
+            <div class="form-group">
+              <label for="pref-phoneFormat">Default Phone Format</label>
+              <select id="pref-phoneFormat">
+                <option value="adaptive">⚡ Adaptive (Auto-detect from field constraints)</option>
+                <option value="digits">10 Digits Only (e.g. 5553492810)</option>
+                <option value="national">Standard US Formatted (e.g. (555) 349-2810)</option>
+                <option value="dashed">Dashed Format (e.g. 555-349-2810)</option>
+                <option value="international">International (+1 555-349-2810)</option>
+              </select>
+            </div>
+          </div>
+          <p class="field-hint" style="margin-top: 8px;">
+            💡 <strong>Adaptive Mode:</strong> Automatically detects if a website requires 10 pure digits (e.g. Workday/maxlength=10), has a separate country code selector (+1), or expects formatted parentheses.
+          </p>
+        </div>
+
+        <div class="form-card">
+          <h3 class="card-title">Address & Location</h3>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="personal-address1">Street Address (Line 1)</label>
+              <input type="text" id="personal-address1" placeholder="742 Evergreen Terrace">
+            </div>
+            <div class="form-group">
+              <label for="personal-address2">Apt / Suite / Unit (Line 2)</label>
+              <input type="text" id="personal-address2" placeholder="Apt 4B">
+            </div>
+          </div>
+          <div class="form-grid-4" style="margin-top: 14px;">
+            <div class="form-group">
+              <label for="personal-city">City</label>
+              <input type="text" id="personal-city" placeholder="San Francisco">
+            </div>
+            <div class="form-group">
+              <label for="personal-state">State / Province</label>
+              <input type="text" id="personal-state" placeholder="California">
+            </div>
+            <div class="form-group">
+              <label for="personal-postalCode">Postal / Zip Code</label>
+              <input type="text" id="personal-postalCode" placeholder="94107">
+            </div>
+            <div class="form-group">
+              <label for="personal-country">Country</label>
+              <input type="text" id="personal-country" placeholder="United States">
+            </div>
+          </div>
+          <div class="form-grid-2" style="margin-top: 14px;">
+            <div class="form-group">
+              <label for="pref-stateFormat">State Autofill Representation</label>
+              <select id="pref-stateFormat">
+                <option value="adaptive">⚡ Adaptive (Matches dropdown options / 2-letter codes)</option>
+                <option value="name">Full State Name (e.g. California)</option>
+                <option value="code">2-Letter Code (e.g. CA)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="personal-stateCode">State Abbreviation</label>
+              <input type="text" id="personal-stateCode" placeholder="CA" maxlength="4">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 2: Links & Socials -->
+      <section id="tab-links" class="tab-pane">
+        <div class="form-card">
+          <h3 class="card-title">Professional Links</h3>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="links-linkedin">LinkedIn Profile URL</label>
+              <input type="url" id="links-linkedin" placeholder="https://linkedin.com/in/yourname">
+            </div>
+            <div class="form-group">
+              <label for="links-github">GitHub Profile URL</label>
+              <input type="url" id="links-github" placeholder="https://github.com/yourname">
+            </div>
+            <div class="form-group">
+              <label for="links-portfolio">Portfolio / Personal Website</label>
+              <input type="url" id="links-portfolio" placeholder="https://yourportfolio.dev">
+            </div>
+            <div class="form-group">
+              <label for="links-twitter">Twitter / X Handle or URL</label>
+              <input type="text" id="links-twitter" placeholder="https://x.com/yourhandle">
+            </div>
+            <div class="form-group full-width">
+              <label for="links-website">Other Website / Blog</label>
+              <input type="url" id="links-website" placeholder="https://yourblog.com">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 3: Education & Work Experience -->
+      <section id="tab-experience" class="tab-pane">
+        <div class="form-card">
+          <h3 class="card-title">Education Background</h3>
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label for="education-school">University / College</label>
+              <input type="text" id="education-school" placeholder="e.g. UC Berkeley">
+            </div>
+            <div class="form-group">
+              <label for="education-degree">Degree</label>
+              <input type="text" id="education-degree" placeholder="e.g. Bachelor's Degree">
+            </div>
+            <div class="form-group">
+              <label for="education-major">Major / Field of Study</label>
+              <input type="text" id="education-major" placeholder="e.g. Computer Science">
+            </div>
+          </div>
+          <div class="form-grid-3" style="margin-top: 14px;">
+            <div class="form-group">
+              <label for="education-gpa">GPA (Optional)</label>
+              <input type="text" id="education-gpa" placeholder="3.8">
+            </div>
+            <div class="form-group">
+              <label for="education-gradYear">Graduation Year</label>
+              <input type="text" id="education-gradYear" placeholder="2023">
+            </div>
+            <div class="form-group">
+              <label for="education-gradMonth">Graduation Month</label>
+              <input type="text" id="education-gradMonth" placeholder="May">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h3 class="card-title">Current Employment & Career</h3>
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label for="work-currentTitle">Current Job Title</label>
+              <input type="text" id="work-currentTitle" placeholder="e.g. Senior Software Engineer">
+            </div>
+            <div class="form-group">
+              <label for="work-currentCompany">Current Company</label>
+              <input type="text" id="work-currentCompany" placeholder="e.g. Acme Corp">
+            </div>
+            <div class="form-group">
+              <label for="work-yearsExperience">Total Years of Experience</label>
+              <input type="text" id="work-yearsExperience" placeholder="5">
+            </div>
+          </div>
+          <div class="form-grid-3" style="margin-top: 14px;">
+            <div class="form-group">
+              <label for="work-currentSalary">Current Salary ($)</label>
+              <input type="text" id="work-currentSalary" placeholder="140000">
+            </div>
+            <div class="form-group">
+              <label for="work-expectedSalary">Desired Salary ($)</label>
+              <input type="text" id="work-expectedSalary" placeholder="165000">
+            </div>
+            <div class="form-group">
+              <label for="work-noticePeriod">Notice Period / Availability</label>
+              <input type="text" id="work-noticePeriod" placeholder="2 weeks">
+            </div>
+          </div>
+          <div class="form-group full-width" style="margin-top: 14px;">
+            <label for="work-summary">Professional Bio / Summary</label>
+            <textarea id="work-summary" rows="3" placeholder="Brief summary of your professional expertise and career achievements..."></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 4: Work Authorization & EEOC -->
+      <section id="tab-compliance" class="tab-pane">
+        <div class="form-card">
+          <h3 class="card-title">Work Authorization</h3>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="auth-authorizedUS">Are you legally authorized to work in the US?</label>
+              <select id="auth-authorizedUS">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="auth-requireSponsorship">Will you now or in future require visa sponsorship?</label>
+              <select id="auth-requireSponsorship">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group full-width" style="margin-top: 14px;">
+            <label for="auth-sponsorshipDetails">Visa / Sponsorship Details (if applicable)</label>
+            <input type="text" id="auth-sponsorshipDetails" placeholder="e.g. Citizen, Green Card, or H-1B transfer">
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h3 class="card-title">Voluntary Demographic Presets (EEOC)</h3>
+          <p class="card-subtitle">These presets will automatically fill common standard self-identification dropdowns.</p>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="auth-veteranStatus">Veteran Status</label>
+              <select id="auth-veteranStatus">
+                <option value="I am not a protected veteran">I am not a protected veteran</option>
+                <option value="I identify as one or more of the classifications of protected veteran">I identify as a protected veteran</option>
+                <option value="I decline to self-identify">I decline to self-identify</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="auth-disabilityStatus">Disability Status</label>
+              <select id="auth-disabilityStatus">
+                <option value="No, I do not have a disability">No, I do not have a disability</option>
+                <option value="Yes, I have a disability">Yes, I have a disability</option>
+                <option value="I do not wish to answer">I do not wish to answer</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="auth-gender">Gender</label>
+              <select id="auth-gender">
+                <option value="Decline to self-identify">Decline to self-identify</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Non-Binary">Non-Binary</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="auth-race">Race / Ethnicity</label>
+              <select id="auth-race">
+                <option value="Decline to self-identify">Decline to self-identify</option>
+                <option value="Asian">Asian</option>
+                <option value="Black or African American">Black or African American</option>
+                <option value="Hispanic or Latino">Hispanic or Latino</option>
+                <option value="White">White</option>
+                <option value="Two or More Races">Two or More Races</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 5: Screening Questions & Custom Fields -->
+      <section id="tab-custom" class="tab-pane">
+        <div class="form-card">
+          <h3 class="card-title">Common Application Questions</h3>
+          <div class="form-group full-width">
+            <label for="qa-tellMeAboutYourself">Tell me about yourself / Elevator Pitch</label>
+            <textarea id="qa-tellMeAboutYourself" rows="3"></textarea>
+          </div>
+          <div class="form-group full-width" style="margin-top: 14px;">
+            <label for="qa-whyThisCompany">Why do you want to work for this company?</label>
+            <textarea id="qa-whyThisCompany" rows="3"></textarea>
+          </div>
+          <div class="form-group full-width" style="margin-top: 14px;">
+            <label for="qa-greatestStrength">What is your greatest strength?</label>
+            <textarea id="qa-greatestStrength" rows="2"></textarea>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <div class="card-header-flex">
+            <div>
+              <h3 class="card-title">Custom Application Fields</h3>
+              <p class="card-subtitle">Define custom question keywords and your default answers.</p>
+            </div>
+            <button id="add-custom-field-btn" class="secondary-btn">+ Add Field</button>
+          </div>
+          <div id="custom-fields-container" class="custom-fields-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 6: Website Rules (Per-Site Overrides) -->
+      <section id="tab-siterules" class="tab-pane">
+        <div class="form-card">
+          <h3 class="card-title">Add Website Rule Override</h3>
+          <p class="card-subtitle">Customize exact phone and state formats for specific application domains (e.g. workday.com, lever.co, greenhouse.io).</p>
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label for="rule-domain">Domain (e.g. workdayjobs.com)</label>
+              <input type="text" id="rule-domain" placeholder="e.g. myworkdayjobs.com">
+            </div>
+            <div class="form-group">
+              <label for="rule-phoneFormat">Phone Format for this site</label>
+              <select id="rule-phoneFormat">
+                <option value="digits">10 Digits Only (no +1, no symbols)</option>
+                <option value="national">Standard US ((555) 349-2810)</option>
+                <option value="dashed">Dashed (555-349-2810)</option>
+                <option value="international">International (+1 555-349-2810)</option>
+                <option value="adaptive">Adaptive</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="rule-stateFormat">State Format for this site</label>
+              <select id="rule-stateFormat">
+                <option value="code">2-Letter Code (e.g. CA)</option>
+                <option value="name">Full Name (e.g. California)</option>
+                <option value="adaptive">Adaptive</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+            <button id="add-site-rule-btn" class="primary-btn">
+              <span>+ Add Website Rule</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h3 class="card-title">Active Website Overrides</h3>
+          <div id="site-rules-list" class="site-rules-list" style="margin-top: 12px;">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 7: Settings, Backup & Restore -->
+      <section id="tab-settings" class="tab-pane">
+        <div class="form-card">
+          <h3 class="card-title">Extension Preferences</h3>
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-title">Show Floating Autofill Widget</div>
+              <div class="toggle-desc">Displays a floating quick-fill pill in bottom corner on application forms.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="setting-floating-widget" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="toggle-row" style="margin-top: 16px;">
+            <div>
+              <div class="toggle-title">Highlight Filled Fields</div>
+              <div class="toggle-desc">Highlights matched inputs with a pulsing emerald outline after filling.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="setting-highlight-fields" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-card">
+          <h3 class="card-title">Backup & Restore</h3>
+          <p class="card-subtitle">Export your profiles and site rules to a JSON file to transfer between devices or keep backups.</p>
+          <div class="action-buttons-row">
+            <button id="export-json-btn" class="secondary-btn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              <span>Export Profiles & Rules (JSON)</span>
+            </button>
+
+            <label class="secondary-btn" style="cursor: pointer;">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+              <span>Import Profiles & Rules (JSON)</span>
+              <input type="file" id="import-json-input" accept=".json" style="display: none;">
+            </label>
+          </div>
+        </div>
+
+        <div class="form-card danger-zone">
+          <h3 class="card-title text-danger">Reset Extension</h3>
+          <p class="card-subtitle">Restore default sample profile data and site rules. All current customizations will be reset.</p>
+          <button id="reset-defaults-btn" class="mini-btn danger" style="margin-top: 10px; padding: 8px 16px;">Reset to Factory Defaults</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="options-toast" class="options-toast hidden"></div>
+
+  <script src="../utils/matcher.js"></script>
+  <script src="../utils/storage.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>
