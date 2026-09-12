@@ -20,8 +20,16 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content/content.js"],
+      "js": ["utils/storage.js", "utils/matcher.js", "content/content.js"],
       "css": ["content/content.css"]
     }
-  ]
+  ],
+  "commands": {
+    "autofill-active-page": {
+      "suggested_key": {
+        "default": "Alt+Shift+F"
+      },
+      "description": "Autofill the current application form"
+    }
+  }
 }

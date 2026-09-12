@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
             await chrome.scripting.executeScript({
               target: { tabId: activeTab.id },
-              files: ['utils/matcher.js', 'content/content.js']
+              files: ['utils/storage.js', 'utils/matcher.js', 'content/content.js']
             });
 
             chrome.tabs.sendMessage(activeTab.id, { action: 'AUTOFILL_PAGE', profile: activeProfile }, (retryResp) => {

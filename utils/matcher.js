@@ -100,15 +100,42 @@
     getFieldClues(element) {
       const clues = [];
 
+      // Identifier attributes are usually camelCase or kebab-case ("addressLine1",
+      // "phone-device-type"). Push a space-separated form too so the word-boundary
+      // regexes in PATTERNS can actually see the individual words.
+      const pushIdentifier = (raw) => {
+        if (!raw) return;
+        clues.push(raw);
+        const spaced = String(raw)
+          .replace(/([a-z])([A-Z])/g, '$1 $2')
+          .replace(/([A-Za-z])(\d)/g, '$1 $2')
+          .replace(/[_\-.]+/g, ' ');
+        if (spaced !== raw) clues.push(spaced);
+      };
+
       // 1. Explicit attributes
-      if (element.name) clues.push(element.name);
-      if (element.id) clues.push(element.id);
+      pushIdentifier(element.name);
+      pushIdentifier(element.id);
       if (element.placeholder) clues.push(element.placeholder);
       if (element.getAttribute('aria-label')) clues.push(element.getAttribute('aria-label'));
       if (element.getAttribute('autocomplete')) clues.push(element.getAttribute('autocomplete'));
-      if (element.getAttribute('data-qa')) clues.push(element.getAttribute('data-qa'));
-      if (element.getAttribute('data-test')) clues.push(element.getAttribute('data-test'));
+      pushIdentifier(element.getAttribute('data-qa'));
+      pushIdentifier(element.getAttribute('data-test'));
       if (element.getAttribute('title')) clues.push(element.getAttribute('title'));
+
+      // 1b. Workday & friends identify every control by data-automation-id
+      // ("addressLine1", "countryRegion", "phone-device-type"). The visible label
+      // is often not associated with the input at all, so this is frequently the
+      // only reliable clue on those forms.
+      pushIdentifier(element.getAttribute('data-automation-id'));
+      pushIdentifier(element.getAttribute('data-automation-label'));
+      pushIdentifier(element.getAttribute('data-uxi-element-id'));
+      const automationWrapper = element.parentElement
+        ? element.parentElement.closest('[data-automation-id]')
+        : null;
+      if (automationWrapper) {
+        pushIdentifier(automationWrapper.getAttribute('data-automation-id'));
+      }
 
       // 2. Associated <label for="id">
       if (element.id) {
@@ -383,7 +410,9 @@
       if (!element || !profile) return null;
 
       const type = (element.type || '').toLowerCase();
-      if (['submit', 'button', 'hidden', 'file', 'reset', 'image'].includes(type)) {
+      const isComboboxTrigger = element.tagName.toLowerCase() === 'button' &&
+        (element.getAttribute('aria-haspopup') === 'listbox' || element.getAttribute('role') === 'combobox');
+      if (!isComboboxTrigger && ['submit', 'button', 'hidden', 'file', 'reset', 'image'].includes(type)) {
         return null;
       }
 
@@ -419,9 +448,21 @@
         };
       }
 
-      // 3. State Field Special Handling
+      // 3/4. Country vs. State disambiguation.
+      // These two overlap on the word "region": Workday labels its country field
+      // "Country/Region", while naming its *state* field's automation id
+      // "countryRegion". Resolve in three steps rather than letting one pattern
+      // win by position:
+      //   a) words that only ever appear on a state field  -> state
+      //   b) otherwise a country word                      -> country
+      //   c) a bare "region" with no country word          -> state
       const statePattern = PATTERNS.find((p) => p.key === 'personal.state');
-      if (statePattern.regex.test(clues)) {
+      const countryPattern = PATTERNS.find((p) => p.key === 'personal.country');
+      // "countryregion" with no separator is Workday's state/province automation id;
+      // the visible label "Country/Region" keeps its slash and so never matches this.
+      const definitelyState = /\b(state|province|territory|administrative[\s_-]?area)\b|countryregion/i.test(clues);
+
+      const buildStateMatch = () => {
         const rawState = profile.personal?.state || profile.personal?.stateCode || 'California';
         const stateInfo = this.resolveState(rawState);
 
@@ -448,11 +489,29 @@
           confidence: 10,
           fieldType: 'state'
         };
+      };
+
+      if (definitelyState) {
+        return buildStateMatch();
       }
 
-      // 4. Phone Field Special Handling
+      if (countryPattern.regex.test(clues)) {
+        return {
+          matchedKey: 'personal.country',
+          value: profile.personal?.country || 'United States',
+          confidence: 12,
+          fieldType: 'country'
+        };
+      }
+
+      if (statePattern.regex.test(clues)) {
+        return buildStateMatch();
+      }
+
+      // 5. Phone Field Special Handling
       const phonePattern = PATTERNS.find((p) => p.key === 'personal.phone');
-      if (phonePattern.regex.test(clues)) {
+      const isPhoneClassifierField = /phone[\s_-]?type|phone[\s_-]?device|device[\s_-]?type|number[\s_-]?type|phone[\s_-]?extension|\bext(ension)?\b/i.test(clues);
+      if (phonePattern.regex.test(clues) && !isPhoneClassifierField) {
         const rawPhone = profile.personal?.phone || '';
         const phoneData = this.parsePhoneNumber(rawPhone);
         const adaptedPhone = this.adaptPhoneNumber(element, phoneData, siteRule, userPreferences.phoneFormat);
@@ -466,7 +525,7 @@
         };
       }
 
-      // 5. Standard Pattern Matching
+      // 6. Standard Pattern Matching
       let bestMatch = null;
       let highestScore = 0;
 
@@ -498,7 +557,7 @@
     /**
      * Sets value on input/textarea/select and dispatches events so React, Angular, Vue detect change.
      */
-    setElementValue(element, matchData) {
+    async setElementValue(element, matchData) {
       if (!element || !matchData) return false;
 
       const tag = element.tagName.toLowerCase();
@@ -513,6 +572,22 @@
             return this.setSelectValueState(element, matchData.stateInfo);
           }
           return this.setSelectValue(element, value);
+        }
+
+        // Button-triggered custom dropdowns (e.g. Workday's state/country listbox widget)
+        if (tag === 'button') {
+          if (element.getAttribute('aria-expanded') !== 'true') {
+            element.click();
+          }
+          // Awaited so only one such dropdown is ever open/being resolved at a
+          // time — without this, fields processed later in the loop can open
+          // their own dropdown before this one resolves, and stray clicks can
+          // land in whichever dropdown happens to be open.
+          const matched = await this.maybeTriggerComboboxSelection(element, value, matchData.stateInfo || null);
+          if (!matched && element.getAttribute('aria-expanded') === 'true') {
+            element.click(); // close it — no match, don't leave it hanging open
+          }
+          return matched;
         }
 
         // Checkboxes
@@ -563,7 +638,7 @@
         }
 
         // Set up async combobox selection (uses MutationObserver — safe to call always)
-        this.maybeTriggerComboboxSelection(element, value, matchData.stateInfo || null);
+        await this.maybeTriggerComboboxSelection(element, value, matchData.stateInfo || null);
 
         return true;
       } catch (err) {
@@ -693,7 +768,7 @@
      * @param {object|null} stateInfo - Optional stateInfo with .variants array for state matching
      */
     maybeTriggerComboboxSelection(element, value, stateInfo = null) {
-      if (!this.isComboboxElement(element)) return;
+      if (!this.isComboboxElement(element)) return Promise.resolve(false);
 
       // Build ordered list of text candidates to match against option labels
       const rawCandidates = stateInfo && stateInfo.variants
@@ -729,12 +804,15 @@
             }
           }
 
-          // 2. Substring / starts-with match
+          // 2. Substring / starts-with match.
+          // Short candidates (state codes like "CA") are deliberately excluded here:
+          // prefix-matching "ca" against a country list picks "Cabo Verde". Codes
+          // that short only ever match via the exact pass above.
           for (const candidate of candidates) {
-            if (candidate.length < 2) continue;
+            if (candidate.length < 4) continue;
             for (const opt of options) {
               const txt = opt.textContent.trim().toLowerCase();
-              if (txt.startsWith(candidate) || (candidate.length > 3 && txt.includes(candidate))) {
+              if (txt.startsWith(candidate) || txt.includes(candidate)) {
                 opt.click();
                 return true;
               }
@@ -744,26 +822,34 @@
         return false;
       };
 
-      // Try immediately in case dropdown is already open
-      if (findAndClickOption()) return;
-
-      // Set up MutationObserver to react the moment the listbox appears in the DOM
-      let resolved = false;
-      const observer = new MutationObserver(() => {
-        if (!resolved && findAndClickOption()) {
-          resolved = true;
-          observer.disconnect();
+      return new Promise((resolve) => {
+        // Try immediately in case dropdown is already open
+        if (findAndClickOption()) {
+          resolve(true);
+          return;
         }
+
+        // Set up MutationObserver to react the moment the listbox appears in the DOM
+        let resolved = false;
+        const observer = new MutationObserver(() => {
+          if (resolved) return;
+          if (findAndClickOption()) {
+            resolved = true;
+            observer.disconnect();
+            resolve(true);
+          }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
+
+        // Safety timeout — give Workday/React up to 4 seconds to render options
+        setTimeout(() => {
+          if (!resolved) {
+            observer.disconnect();
+            const success = findAndClickOption(); // last-chance attempt
+            resolve(success);
+          }
+        }, 4000);
       });
-      observer.observe(document.body, { childList: true, subtree: true });
-
-      // Safety timeout — give Workday/React up to 4 seconds to render options
-      setTimeout(() => {
-        if (!resolved) {
-          observer.disconnect();
-          findAndClickOption(); // last-chance attempt
-        }
-      }, 4000);
     },
 
     /**

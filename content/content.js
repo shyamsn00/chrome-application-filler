@@ -14,7 +14,7 @@
    * Scans document and returns all viable form control elements.
    */
   function getCandidateElements() {
-    const selector = 'input:not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]), textarea, select';
+    const selector = 'input:not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]), textarea, select, button[aria-haspopup="listbox"], [role="combobox"]';
     return Array.from(document.querySelectorAll(selector)).filter((el) => {
       // Must not be disabled or hidden via style
       if (el.disabled || el.readOnly) return false;
@@ -85,19 +85,33 @@
 
     const orderedElements = [...priorityFields, ...normalFields];
 
+    const skipped = [];
+
     for (const el of orderedElements) {
       if (!window.AppFillerMatcher) continue;
       const match = window.AppFillerMatcher.matchField(el, profile, siteRule, preferences);
       if (match && match.value != null) {
-        const changed = window.AppFillerMatcher.setElementValue(el, match);
+        const changed = await window.AppFillerMatcher.setElementValue(el, match);
         if (changed) {
           filledCount++;
           filledElements.push(el);
           if (settingsCache.autoHighlight) {
             el.classList.add('app-filler-highlight');
           }
+        } else {
+          skipped.push({ el, clues: window.AppFillerMatcher.getFieldClues(el), reason: `matched ${match.matchedKey} but value could not be set` });
         }
+      } else {
+        skipped.push({ el, clues: window.AppFillerMatcher.getFieldClues(el), reason: 'no pattern matched' });
       }
+    }
+
+    // Diagnostics: makes it possible to see *why* a field on a given ATS was
+    // left alone (usually the clue text the matcher saw is not what's on screen).
+    if (skipped.length) {
+      console.groupCollapsed(`AutoFill Pro: ${skipped.length} field(s) not filled`);
+      skipped.forEach((s) => console.log(s.reason, '|clues:', s.clues || '(none)', s.el));
+      console.groupEnd();
     }
 
     if (filledCount > 0) {
@@ -225,9 +239,12 @@
   // Listen for messages from popup or background script
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'AUTOFILL_PAGE') {
-      performAutofill(request.profile).then((result) => {
-        sendResponse(result);
-      });
+      performAutofill(request.profile)
+        .then((result) => sendResponse(result))
+        .catch((err) => {
+          console.error('AutoFill Pro: autofill failed', err);
+          sendResponse({ success: false, count: 0, error: err.message });
+        });
       return true;
     }
 
